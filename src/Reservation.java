@@ -4,31 +4,36 @@ import java.util.Date;
 public class Reservation {
 
 
-
-  private LocalDateTime dateResrvation;
-  private  LocalDateTime dateLimite;
+    
+  private Date dateResrvation;
+  private  Date dateLimite;
 
     public Reservation() {
 
     }
-    public Reservation(LocalDateTime dateResrvation, LocalDateTime dateLimite) {
+    public Reservation(Date dateResrvation, Date dateLimite) {
         this.dateResrvation = dateResrvation;
         this.dateLimite = dateLimite;
     }
 
-    public LocalDateTime getDateResrvation() {
+    public Date getDateResrvation() {
         return dateResrvation;
     }
 
-    public void setDateResrvation(LocalDateTime dateResrvation) {
+    public void setDateResrvation(Date dateResrvation) {
         this.dateResrvation = dateResrvation;
     }
 
-    public void setDateLimite(LocalDateTime dateLimite) {
+    public void setDateLimite(Date dateLimite) {
         this.dateLimite = dateLimite;
     }
 
-    public LocalDateTime getDateLimite() {
+    public Date getDateLimite() {
         return dateLimite;
+    }
+
+    @Override
+    public String toString() {
+        return dateLimite+" "+dateResrvation;
     }
 }

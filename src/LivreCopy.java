@@ -20,4 +20,9 @@ public class LivreCopy extends Livre {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    @Override
+    public String toString() {
+    return nom +" "+status;
+    }
 }

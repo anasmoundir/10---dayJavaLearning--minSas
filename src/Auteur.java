@@ -47,5 +47,14 @@ public class Auteur {
         Books.add(livre1);
     }
 
+    @Override
+    public String toString() {
+        return "Auteur{" +
+                "name='" + name + '\'' +
+                ", adress='" + adress + '\'' +
+                ", Books=" + Books +
+                '}';
+    }
+
 
 }

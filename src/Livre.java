@@ -39,4 +39,8 @@ public class Livre {
         return quantity;
     }
 
+    @Override
+    public String toString() {
+        return numeroIsbn+" "+quantity+" "+titre;
+    }
 }
