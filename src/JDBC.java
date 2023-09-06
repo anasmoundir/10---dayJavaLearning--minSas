@@ -16,14 +16,6 @@ JDBC()
 
             String query = "SELECT * FROM livre";
         resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            String colonne1 = resultSet.getString("titre");
-            String colonne2 = resultSet.getString("annee_publication");
-            String colonne3 = resultSet.getString("auteur_id");
-            System.out.println(colonne1);
-            System.out.println(colonne2);
-            System.out.println(colonne3);
-        }
     } catch (Exception e) {
         e.printStackTrace();
     } finally {
