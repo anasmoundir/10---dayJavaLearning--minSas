@@ -8,9 +8,17 @@ public class Livre {
     private String titre;
     private int quantity;
     private boolean status;
+    private  int annee_publication;
 
-    private List<LivreCopy> Livres = new ArrayList<>();
-     private Auteur auteur;
+    Auteur auteur;
+    public void setAnnee_publication(int annee_publication) {
+        this.annee_publication = annee_publication;
+    }
+
+    public int getAnnee_publication() {
+        return annee_publication;
+    }
+
 
 
 
@@ -39,6 +47,18 @@ public class Livre {
     }
     public int getQuantity() {
         return quantity;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setNumeroIsbn(int numeroIsbn) {
+        this.numeroIsbn = numeroIsbn;
+    }
+
+    public void setAuteur(Auteur auteur) {
+        this.auteur = auteur;
     }
 
     @Override

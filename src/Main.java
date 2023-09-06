@@ -9,7 +9,7 @@ public class Main {
             afficherMenuPrincipal();
 
             int choix = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
             switch (choix) {
                 case 1:
@@ -55,7 +55,7 @@ public class Main {
             System.out.print("Votre choix : ");
 
             int choix = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
             switch (choix) {
                 case 1:
