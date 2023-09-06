@@ -2,7 +2,6 @@ package DAO;
 
 import Entities.Livre;
 import services.Database;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,12 +16,9 @@ public class BookDao {
 
 
             Connection connexion = Database.getConnection();
-            String rechercherAutheurParNom = "select id from auteur where nom = ? ";
-            PreparedStatement PreparedStatement = connexion.prepareStatement(rechercherAutheurParNom);
-            PreparedStatement.setString(1, nom);
-            ResultSet resultset = PreparedStatement.executeQuery();
-            if (resultset.next()) {
-                auteurId = resultset.getInt("id");
+            getAuteurIdParNom(nom);
+            if (getAuteurIdParNom(nom)!=-1) {
+                auteurId = getAuteurIdParNom(nom);
                 String ajoutLivreQuery = "INSERT INTO livre (titre, annee_publication, quantiy, auteur_id) VALUES (?, ?, ?, ?)";
                 PreparedStatement preparedStatement = connexion.prepareStatement(ajoutLivreQuery);
                 preparedStatement.setString(1, livre.getTitre());
@@ -62,18 +58,38 @@ public class BookDao {
 
     }
 
-    public static void modifierLivre(Livre livre,String nom) {
+    public static void modifierLivre(Livre livre, String nom) {
         try {
+
             Connection connection = Database.getConnection();
+             getAuteurIdParNom(nom);
+            if (getAuteurIdParNom(nom)!=-1) {
             String chercherLivreParNom = "SELECT id FROM livre WHERE titre = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(chercherLivreParNom);
             preparedStatement.setString(1, livre.getTitre());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int livreId = resultSet.getInt("id");
 
+                int livreId = resultSet.getInt("id");
+                 String modifierLivreQuery = "UPDATE livre SET titre = ?, annee_publication = ?, quantity = ? WHERE id = ?";
+                                 PreparedStatement updateStatement = connection.prepareStatement(modifierLivreQuery);
+                                 updateStatement.setString(1, livre.getTitre());
+                                 updateStatement.setInt(2, livre.getAnnee_publication());
+                                 updateStatement.setInt(3, livre.getQuantity());
+                                 updateStatement.setInt(4, livreId);
                  
+                                 int rowsUpdated = updateStatement.executeUpdate();
+                                 if (rowsUpdated > 0) {
+                                 System.out.println("Livre modifié avec succès !");
+                                    } else {
+                                   System.out.println("Échec de la modification du livre.");
+                                }
+
+
                 System.out.println("Livre modifié avec succès !");
+            }   }else
+            {
+                            System.out.println("l'autheur n'exist pas  !");
             }
 
         } catch (SQLException e) {
@@ -100,23 +116,25 @@ public class BookDao {
 
 
     }
+
+    public static int getAuteurIdParNom(String nom)
+    {
+        try {
+            Connection connection = Database.getConnection();
+            String rechercheAuteurQuery = "SELECT id FROM auteur WHERE nom = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(rechercheAuteurQuery);
+            preparedStatement.setString(1, nom);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+         return -1;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
