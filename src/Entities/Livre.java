@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Livre {
-    private int numeroIsbn;
+
     private String titre;
     private int quantity;
     private boolean status;
@@ -22,9 +22,9 @@ public class Livre {
 
 
 
-    public Livre(int numeroIsbn,String titre,int Quantity, boolean status)
+    public Livre(String titre,int Quantity, boolean status)
     {
-        this.numeroIsbn = numeroIsbn;
+
         this.titre = titre;
         this.quantity = quantity;
         this.status = status;
@@ -53,8 +53,9 @@ public class Livre {
         return titre;
     }
 
-    public void setNumeroIsbn(int numeroIsbn) {
-        this.numeroIsbn = numeroIsbn;
+
+    public Auteur getAuteur() {
+        return auteur;
     }
 
     public void setAuteur(Auteur auteur) {
@@ -63,6 +64,11 @@ public class Livre {
 
     @Override
     public String toString() {
-        return numeroIsbn+" "+quantity+" "+titre;
+        return "Livre{" +
+                "titre='" + titre + '\'' +
+                ", quantity=" + quantity +
+                ", annee_publication=" + annee_publication +
+                ", auteur=" + auteur +
+                '}';
     }
 }

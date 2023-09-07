@@ -1,13 +1,13 @@
 package services;
 import DAO.BookDao;
 import Entities.Livre;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import static DAO.BookDao.afficherTousLesLivres;
 
 
 public class LivreService {
@@ -31,7 +31,18 @@ public class LivreService {
     }
 
     public static void afficherLivresDisponibles() {
+         List<Livre> livres = afficherTousLesLivres();
+//
+//        for (Livre livre : livres) {
+//            System.out.println(livre.toString());
+//        }
+         int i =0;
 
+         while(i<livres.size())
+         {
+             System.out.println(livres.get(i));
+            i++;
+         }
 
     }
 
