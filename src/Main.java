@@ -68,10 +68,10 @@ public class Main {
                     LivreService.rechercherLivre(scanner);
                     break;
                 case 4:
-                    LivreService.emprunterLivre(scanner);
+                    ReservationService.emprunterLivre(scanner);
                     break;
                 case 5:
-                    LivreService.retournerLivre(scanner);
+                    ReservationService.retournerLivre(scanner);
                     break;
                 case 6:
                     LivreService.afficherLivresEmpruntes();

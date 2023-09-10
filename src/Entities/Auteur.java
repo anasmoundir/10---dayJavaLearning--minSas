@@ -35,7 +35,7 @@ public class Auteur {
     }
 
     public void setName(String name) {
-        name = name;
+        this.name = name;
     }
 
     public String getAdress() {

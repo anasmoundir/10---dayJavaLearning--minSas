@@ -101,7 +101,7 @@ public class BookDao {
         List<Livre> livres = new ArrayList<>();
         try {
             Connection connection = Database.getConnection();
-            String selectAllLivresQuery = "SELECT * FROM livre";
+            String selectAllLivresQuery = "SELECT * FROM livre WHERE quantiy <> 0";
             PreparedStatement preparedStatement = connection.prepareStatement(selectAllLivresQuery);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -151,7 +151,6 @@ public class BookDao {
             } else {
                 System.out.println("the auteur doesn't exist");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,7 +166,6 @@ public class BookDao {
             PreparedStatement preparedStatement = connection.prepareStatement(rechercheAuteurQuery);
             preparedStatement.setString(1, nom);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
                 return resultSet.getInt("id");
             }
@@ -177,8 +175,65 @@ public class BookDao {
          return -1;
     }
 
+    public static  Livre rechercherLivresParTitre(String titre)
+    {
+         Livre livre = new Livre();
+//        List<Livre> livres = new ArrayList<>();
+        try {
+            Connection connection = Database.getConnection();
+            String searchingQuery = "SELECT * FROM livre where titre = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(searchingQuery);
+            preparedStatement.setString(1,titre);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next())
+            {
+                  livre.setId_livre(resultSet.getInt("id"));
+                  livre.setTitre(resultSet.getString("titre"));
+                  livre.setAnnee_publication(resultSet.getInt("annee_publication"));
+                  livre.setQuantity(resultSet.getInt("quantiy"));
+                  int auhtorId = resultSet.getInt("auteur_id");
+                  livre.setAuteur(fetchAuteurById(auhtorId));
+//                  livres.add(livre);}
+            }
+        }catch (SQLException e)
+        {
+                e.printStackTrace();
+        }
 
+       return livre;
+    }
 
+     public static  List<Livre>   rechercherLivresParAuteur(String nom)
+     {
+          Livre livre = new Livre();
+         List<Livre> livres = new ArrayList<>();
+         try {
+             Connection connection = Database.getConnection();
+             String searchingQuery ="SELECT  livre.id livre.titre, livre.annee_publication, livre.quantiy " +
+                                        "FROM livre " +
+                                        "INNER JOIN auteur ON livre.auteur_id = auteur.id " +
+                                        "WHERE auteur.nom LIKE ?";
+             PreparedStatement preparedStatement = connection.prepareStatement(searchingQuery);
+             preparedStatement.setString(1,nom);
+             ResultSet resultSet = preparedStatement.executeQuery();
+
+             while(resultSet.next())
+             {
+                   livre.setId_livre(resultSet.getInt("id"));
+                   livre.setTitre(resultSet.getString("titre"));
+                   livre.setAnnee_publication(resultSet.getInt("annee_publication"));
+                   livre.setQuantity(resultSet.getInt("quantiy"));
+                   int auhtorId = getNameAuthorById(nom) ;
+                   livre.setAuteur(fetchAuteurById(auhtorId));
+                   livres.add(livre);
+             }
+                                                                                
+         }catch (SQLException e)
+         {
+                 e.printStackTrace();
+         }
+        return livres;
+     }
 }
 
 

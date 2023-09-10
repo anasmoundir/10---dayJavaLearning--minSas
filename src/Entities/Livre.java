@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Livre {
 
+    private  int id_livre;
     private String titre;
     private int quantity;
     private boolean status;
@@ -19,10 +20,19 @@ public class Livre {
         return annee_publication;
     }
 
+    public int getId_livre() {
+        return id_livre;
+    }
 
+    public void setId_livre(int id_livre) {
+        this.id_livre = id_livre;
+    }
 
+    public boolean isStatus() {
+        return status;
+    }
 
-    public Livre(String titre,int Quantity, boolean status)
+    public Livre(String titre, int Quantity, boolean status)
     {
 
         this.titre = titre;
@@ -64,11 +74,11 @@ public class Livre {
 
     @Override
     public String toString() {
-        return "Livre{" +
+        return""+ '\'' +
                 "titre='" + titre + '\'' +
                 ", quantity=" + quantity +
                 ", annee_publication=" + annee_publication +
-                ", auteur=" + auteur +
-                '}';
+                ", auteur=" + auteur.getName()
+                +"";
     }
 }

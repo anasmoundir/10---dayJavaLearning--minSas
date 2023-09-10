@@ -1,7 +1,7 @@
 package services;
 import DAO.BookDao;
+import DAO.ReservationDao;
 import Entities.Livre;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +31,9 @@ public class LivreService {
     }
 
     public static void afficherLivresDisponibles() {
+
          List<Livre> livres = afficherTousLesLivres();
-//
-//        for (Livre livre : livres) {
-//            System.out.println(livre.toString());
-//        }
+
          int i =0;
 
          while(i<livres.size())
@@ -43,15 +41,51 @@ public class LivreService {
              System.out.println(livres.get(i));
             i++;
          }
-
     }
+
+
 
 
     public static void rechercherLivre(Scanner scanner) {
+        System.out.println("Choisissez une option de recherche :");
+        System.out.println("1. Rechercher par titre");
+        System.out.println("2. Rechercher par auteur");
+        System.out.print("Votre choix : ");
+        int choix = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
 
-    }
+        switch (choix) {
+            case 1:
+                System.out.print("Entrez le titre du livre à rechercher : ");
+                String titreRecherche = scanner.nextLine();
+                Livre livre = new Livre();
+                livre = BookDao.rechercherLivresParTitre(titreRecherche);
 
-    public static void emprunterLivre(Scanner scanner) {
+                if (livre == null ) {
+                    System.out.println("Aucun livre trouvé.");
+                } else {
+                    System.out.println("Liste des livres trouvés :");
+
+                        System.out.println(livre);
+                }
+
+                break;
+            case 2:
+                System.out.print("Entrez le nom de l'auteur à rechercher : ");
+                String auteurRecherche = scanner.nextLine();
+             List<Livre> livresParAuteur = BookDao.rechercherLivresParAuteur(auteurRecherche);
+                if (livresParAuteur.isEmpty()) {
+                    System.out.println("Aucun livre trouvé.");
+                } else {
+                    System.out.println("Liste des livres trouvés :");
+                    for (Livre livre1 : livresParAuteur) {
+                        System.out.println(livre1);
+                    }
+                }
+                break;
+            default:
+                System.out.println("Choix invalide. Veuillez réessayer.");
+        }
 
     }
 
@@ -95,6 +129,7 @@ public class LivreService {
             e.printStackTrace();
         }
     }
+
 
 
 }
