@@ -11,8 +11,10 @@ public class Reservation {
   private Date dateResrvation;
   private  Date dateLimite;
 
-  Auteur auteur;
-  Livre livre;
+  LivreCopy livreCopy;
+  Adherent adherent;
+
+
 
 
 
@@ -38,6 +40,23 @@ public class Reservation {
 
     public Date getDateLimite() {
         return dateLimite;
+    }
+
+
+    public LivreCopy getLivreCopy() {
+        return livreCopy;
+    }
+
+    public void setLivreCopy(LivreCopy livreCopy) {
+        this.livreCopy = livreCopy;
+    }
+
+    public Adherent getAdherent() {
+        return adherent;
+    }
+
+    public void setAdherent(Adherent adherent) {
+        this.adherent = adherent;
     }
 
     @Override

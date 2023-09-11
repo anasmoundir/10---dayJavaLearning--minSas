@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Livre {
-    private int numeroIsbn;
+
+    private  int id_livre;
     private String titre;
     private int quantity;
     private boolean status;
     private  int annee_publication;
+    private  int ISBN;
+
 
     Auteur auteur;
     public void setAnnee_publication(int annee_publication) {
@@ -19,12 +22,21 @@ public class Livre {
         return annee_publication;
     }
 
+    public int getId_livre() {
+        return id_livre;
+    }
 
+    public void setId_livre(int id_livre) {
+        this.id_livre = id_livre;
+    }
 
+    public boolean isStatus() {
+        return status;
+    }
 
-    public Livre(int numeroIsbn,String titre,int Quantity, boolean status)
+    public Livre(String titre, int Quantity, boolean status)
     {
-        this.numeroIsbn = numeroIsbn;
+
         this.titre = titre;
         this.quantity = quantity;
         this.status = status;
@@ -53,16 +65,31 @@ public class Livre {
         return titre;
     }
 
-    public void setNumeroIsbn(int numeroIsbn) {
-        this.numeroIsbn = numeroIsbn;
+
+    public Auteur getAuteur() {
+        return auteur;
     }
 
     public void setAuteur(Auteur auteur) {
         this.auteur = auteur;
     }
 
+    public int getISBN() {
+        return ISBN;
+    }
+
+    public void setISBN(int ISBN) {
+        this.ISBN = ISBN;
+    }
     @Override
     public String toString() {
-        return numeroIsbn+" "+quantity+" "+titre;
+        return""+ '\'' +
+                "titre='" + titre + '\'' +
+                ", quantity=" + quantity +
+                ", annee_publication=" + annee_publication +
+                ", auteur=" + auteur.getName()
+                +"";
     }
+
+
 }
