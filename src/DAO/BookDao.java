@@ -12,22 +12,25 @@ import java.util.List;
 
 public class BookDao {
 
-
+    static  Connection connection = Database.getConnection();
     public static void insertQueryBook(Livre livre, String nom) {
         int auteurId;
+
         try {
 
 
-            Connection connexion = Database.getConnection();
+
             getAuteurIdParNom(nom);
             if (getAuteurIdParNom(nom) != -1) {
                 auteurId = getAuteurIdParNom(nom);
-                String ajoutLivreQuery = "INSERT INTO livre (titre, annee_publication, quantiy, auteur_id) VALUES (?, ?, ?, ?)";
-                PreparedStatement preparedStatement = connexion.prepareStatement(ajoutLivreQuery);
+                String ajoutLivreQuery = "INSERT INTO livre (titre, annee_publication, quantiy, auteur_id,status,ISBN) VALUES (?, ?, ?, ?,?,?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(ajoutLivreQuery);
                 preparedStatement.setString(1, livre.getTitre());
                 preparedStatement.setInt(2, livre.getAnnee_publication());
                 preparedStatement.setInt(3, livre.getQuantity());
                 preparedStatement.setInt(4, auteurId);
+                preparedStatement.setBoolean(5,livre.isStatus());
+                preparedStatement.setInt(6,livre.getISBN());
                 preparedStatement.executeUpdate();
                 System.out.println("Livre ajouté avec succès !");
             } else
@@ -40,7 +43,7 @@ public class BookDao {
 
     public static void supprimerLivre(Livre livre) {
         try {
-            Connection connection = Database.getConnection();
+
             String chercherLivreParNom = "SELECT id FROM livre WHERE titre = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(chercherLivreParNom);
             preparedStatement.setString(1, livre.getTitre());
@@ -62,8 +65,6 @@ public class BookDao {
 
     public static void modifierLivre(Livre livre, String nom) {
         try {
-
-            Connection connection = Database.getConnection();
             getAuteurIdParNom(nom);
             if (getAuteurIdParNom(nom) != -1) {
                 String chercherLivreParNom = "SELECT id FROM livre WHERE titre = ?";
@@ -79,6 +80,7 @@ public class BookDao {
                     updateStatement.setInt(2, livre.getAnnee_publication());
                     updateStatement.setInt(3, livre.getQuantity());
                     updateStatement.setInt(4, livreId);
+
 
                     int rowsUpdated = updateStatement.executeUpdate();
                     if (rowsUpdated > 0) {
@@ -100,7 +102,7 @@ public class BookDao {
     public static List<Livre> afficherTousLesLivres() {
         List<Livre> livres = new ArrayList<>();
         try {
-            Connection connection = Database.getConnection();
+
             String selectAllLivresQuery = "SELECT * FROM livre WHERE quantiy <> 0";
             PreparedStatement preparedStatement = connection.prepareStatement(selectAllLivresQuery);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -122,7 +124,6 @@ public class BookDao {
 
     public static int getAuteurIdParNom(String nom) {
         try {
-            Connection connection = Database.getConnection();
             String rechercheAuteurQuery = "SELECT id FROM auteur WHERE nom = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rechercheAuteurQuery);
             preparedStatement.setString(1, nom);
@@ -140,7 +141,6 @@ public class BookDao {
     public static Auteur fetchAuteurById(int auteurId) {
             Auteur auteur = new Auteur();
         try {
-            Connection connection = Database.getConnection();
             String selectAutherById = "SELECT * FROM auteur where id =?  ";
             PreparedStatement preparedStatement = connection.prepareStatement(selectAutherById);
             preparedStatement.setInt(1, auteurId);
@@ -161,7 +161,6 @@ public class BookDao {
     public static int  getNameAuthorById(String nom)
     {
         try {
-            Connection connection = Database.getConnection();
             String rechercheAuteurQuery = "SELECT id FROM auteur WHERE nom = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rechercheAuteurQuery);
             preparedStatement.setString(1, nom);
@@ -177,11 +176,9 @@ public class BookDao {
 
     public static  Livre rechercherLivresParTitre(String titre)
     {
-        System.out.println("search book function");
          Livre livre = new Livre();
         try {
-            Connection connection = Database.getConnection();
-            String searchingQuery = "SELECT * FROM livre where titre = ?";
+            String searchingQuery = "SELECT * FROM livre WHERE titre  LIKE ?";
             PreparedStatement preparedStatement = connection.prepareStatement(searchingQuery);
             preparedStatement.setString(1,titre);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -192,6 +189,7 @@ public class BookDao {
                   livre.setAnnee_publication(resultSet.getInt("annee_publication"));
                   livre.setQuantity(resultSet.getInt("quantiy"));
                   int auhtorId = resultSet.getInt("auteur_id");
+                  livre.setISBN(resultSet.getInt("ISBN"));
                   livre.setAuteur(fetchAuteurById(auhtorId));
             }
         }catch (SQLException e)
@@ -207,7 +205,6 @@ public class BookDao {
           Livre livre = new Livre();
          List<Livre> livres = new ArrayList<>();
          try {
-             Connection connection = Database.getConnection();
              String searchingQuery = "SELECT livre.id, livre.titre, livre.annee_publication, livre.quantiy, auteur.nom AS nom_auteur " +
                      "FROM livre " +
                      "INNER JOIN auteur ON livre.auteur_id = auteur.id " +
@@ -222,6 +219,7 @@ public class BookDao {
                    livre.setTitre(resultSet.getString("titre"));
                    livre.setAnnee_publication(resultSet.getInt("annee_publication"));
                    livre.setQuantity(resultSet.getInt("quantiy"));
+                   livre.setISBN(resultSet.getInt("ISBN"));
                    int auhtorId = getNameAuthorById(nom) ;
                    livre.setAuteur(fetchAuteurById(auhtorId));
                    livres.add(livre);

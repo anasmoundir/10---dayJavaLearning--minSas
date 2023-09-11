@@ -80,11 +80,22 @@
       <updated>1693818483148</updated>
       <workItem from="1693818484478" duration="101370000" />
       <workItem from="1694203036093" duration="26966000" />
-      <workItem from="1694440025738" duration="6193000" />
+      <workItem from="1694440025738" duration="14852000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/services/LivreService.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

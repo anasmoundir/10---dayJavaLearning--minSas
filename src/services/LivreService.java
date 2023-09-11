@@ -1,6 +1,8 @@
 package services;
+import DAO.AuthorDao;
 import DAO.BookDao;
 import DAO.ReservationDao;
+import Entities.Auteur;
 import Entities.Livre;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ public class LivreService {
 
 
     public static void ajouterNouveauLivre(Scanner scanner) {
+        boolean status = true;
+        System.out.println("the list of all the authors");
+        printAllAuteurs();
         System.out.println("Entrez le titre du livre : ");
         String titre = scanner.nextLine();
         System.out.println("Entrez l'année de publication : ");
@@ -23,10 +28,23 @@ public class LivreService {
         int quantite = scanner.nextInt();
         System.out.print("Entrez la le nom de l'auteur : ");
         String nom = scanner.next();
+        System.out.print("Entrez la l'ISBN de livre ");
+        int ISBN = scanner.nextInt();
+        if(quantite > 0)
+        {
+            status = true;
+
+        }else
+        {
+            status = false;
+        }
+
         Livre livre1 = new Livre();
         livre1.setQuantity(quantite);
         livre1.setAnnee_publication(anneePublication);
         livre1.setTitre(titre);
+        livre1.setISBN(ISBN);
+        livre1.setStatus(status);
         BookDao.insertQueryBook(livre1,nom);
     }
 
@@ -42,6 +60,20 @@ public class LivreService {
             i++;
          }
     }
+    public static void printAllAuteurs() {
+        List<Auteur> auteurs = AuthorDao.getAllAuteurs();
+
+        if (auteurs.isEmpty()) {
+            System.out.println("Aucun auteur disponible.");
+        } else {
+            System.out.println("Liste des auteurs disponibles :");
+            for (Auteur auteur : auteurs) {
+                System.out.println("ID : " + auteur.getId() + ", Nom : " + auteur.getName());
+
+            }
+        }
+    }
+
 
 
 

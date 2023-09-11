@@ -41,7 +41,6 @@ public class RapportGenerationDao {
                 System.out.println("Nombre de livres empruntés : " + livresEmpruntes);
             }
 
-
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();

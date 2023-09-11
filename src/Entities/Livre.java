@@ -10,6 +10,8 @@ public class Livre {
     private int quantity;
     private boolean status;
     private  int annee_publication;
+    private  int ISBN;
+
 
     Auteur auteur;
     public void setAnnee_publication(int annee_publication) {
@@ -72,6 +74,13 @@ public class Livre {
         this.auteur = auteur;
     }
 
+    public int getISBN() {
+        return ISBN;
+    }
+
+    public void setISBN(int ISBN) {
+        this.ISBN = ISBN;
+    }
     @Override
     public String toString() {
         return""+ '\'' +
@@ -81,4 +90,6 @@ public class Livre {
                 ", auteur=" + auteur.getName()
                 +"";
     }
+
+
 }

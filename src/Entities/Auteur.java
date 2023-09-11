@@ -7,6 +7,17 @@ import java.util.List;
 
 public class Auteur {
 
+
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String name;
     private String adress;
 
@@ -21,8 +32,9 @@ public class Auteur {
         Books = books;
     }
 
-    public Auteur(String name, String adress)
+    public Auteur(int id,String name, String adress)
     {
+        this.id = id;
         this.name = name;
         this.adress = adress;
     }
