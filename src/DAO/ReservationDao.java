@@ -76,7 +76,7 @@ public class ReservationDao {
             if (resultSet.next()) {
                 return resultSet.getInt("id");
             } else {
-                return -1; // Retourne -1 si l'adhérent n'est pas trouvé.
+                return -1;
             }
         } catch (java.sql.SQLException e) {
             throw new RuntimeException(e);
@@ -105,11 +105,25 @@ public class ReservationDao {
             e.printStackTrace();
         }
     }
-     public  static  void retournerLivreQuery(Scanner scanner)
-    {
 
 
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

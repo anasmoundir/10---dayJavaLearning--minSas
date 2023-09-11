@@ -37,6 +37,16 @@ public class ReservationService {
     }
 
 
+
+
+
     public static void retournerLivre(Scanner scanner) {
+        System.out.println("===== Retourner un livre emprunté =====");
+        System.out.print("Entrez le titre du livre que vous souhaitez retourner : ");
+        String titre = scanner.nextLine();
+        ReservationDao.retournerLivreQuery(scanner, titre);
     }
+
+
+
 }

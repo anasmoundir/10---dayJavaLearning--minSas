@@ -90,9 +90,6 @@ public class LivreService {
     }
 
 
-    public static void retournerLivre(Scanner scanner) {
-
-    }
 
 
     public static void afficherLivresEmpruntes() {
@@ -128,7 +125,39 @@ public class LivreService {
         {
             e.printStackTrace();
         }
+
     }
+
+
+    public static void emprunterLivre(Scanner scanner) {
+        System.out.println("La liste des livres disponibles :");
+        afficherLivresDisponibles();
+        System.out.println("Entrez le titre du livre que vous souhaitez emprunter :");
+        String titre = scanner.nextLine();
+        Livre livre = ReservationDao.emprunterLiveQuery(scanner, titre);
+        if (livre != null) {
+            System.out.println("Emprunt du livre réussi : " + livre.getTitre());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
