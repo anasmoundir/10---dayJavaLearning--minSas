@@ -177,8 +177,8 @@ public class BookDao {
 
     public static  Livre rechercherLivresParTitre(String titre)
     {
+        System.out.println("search book function");
          Livre livre = new Livre();
-//        List<Livre> livres = new ArrayList<>();
         try {
             Connection connection = Database.getConnection();
             String searchingQuery = "SELECT * FROM livre where titre = ?";
@@ -193,7 +193,6 @@ public class BookDao {
                   livre.setQuantity(resultSet.getInt("quantiy"));
                   int auhtorId = resultSet.getInt("auteur_id");
                   livre.setAuteur(fetchAuteurById(auhtorId));
-//                  livres.add(livre);}
             }
         }catch (SQLException e)
         {
@@ -209,12 +208,12 @@ public class BookDao {
          List<Livre> livres = new ArrayList<>();
          try {
              Connection connection = Database.getConnection();
-             String searchingQuery ="SELECT  livre.id livre.titre, livre.annee_publication, livre.quantiy " +
-                                        "FROM livre " +
-                                        "INNER JOIN auteur ON livre.auteur_id = auteur.id " +
-                                        "WHERE auteur.nom LIKE ?";
+             String searchingQuery = "SELECT livre.id, livre.titre, livre.annee_publication, livre.quantiy, auteur.nom AS nom_auteur " +
+                     "FROM livre " +
+                     "INNER JOIN auteur ON livre.auteur_id = auteur.id " +
+                     "WHERE auteur.nom LIKE ?";
              PreparedStatement preparedStatement = connection.prepareStatement(searchingQuery);
-             preparedStatement.setString(1,nom);
+             preparedStatement.setString(1, "%" + nom + "%");
              ResultSet resultSet = preparedStatement.executeQuery();
 
              while(resultSet.next())

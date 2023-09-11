@@ -16,22 +16,24 @@ public class ReservationDao {
      static  Connection connection = Database.getConnection();
 
     public static Livre emprunterLiveQuery(Scanner scanner, String titre) {
-        System.out.println("here");
+
         Livre livre = new Livre();
         try {
 
             livre = BookDao.rechercherLivresParTitre(titre);
 
+
             if (livre != null) {
                 String statement = "SELECT * FROM livrecopy WHERE livre_id = ? AND etat = 1 ";
                 PreparedStatement preparedStatement = connection.prepareStatement(statement);
                 preparedStatement.setInt(1, livre.getId_livre());
-                System.out.println(livre.getId_livre());
+//                System.out.println(livre.getId_livre());
                 ResultSet resultSet = preparedStatement.executeQuery();
-                System.out.println(resultSet);
+//                System.out.println(resultSet);
                 if (resultSet.next()) {
                     int livreCopyId = resultSet.getInt("id");
                     int adherentId = obtenirIdAdherent(scanner);
+                    System.out.println(adherentId);
 
                     if (adherentId != -1) {
                         String query = "INSERT INTO reservation (livre_copy_id,adherent_id,date_reservation,date_limit) VALUES(?,?,?,?)";
@@ -43,7 +45,7 @@ public class ReservationDao {
                         LocalDate dateLimite = datenow.plusDays(7);
                         preparedStatement1.setDate(4, Date.valueOf(dateLimite));
                         preparedStatement1.executeUpdate();
-
+                        checkAndUpdateStatus(livre);
                         updateLivreCopyState(livreCopyId, 1);
                         System.out.println("Emprunt réussi !");
                     } else {
@@ -83,6 +85,36 @@ public class ReservationDao {
         }
     }
 
+
+    public static boolean checkAndUpdateStatus(Livre livre) {
+        boolean status = true;
+        try {
+            Connection connection = Database.getConnection();
+            String query = "SELECT quantiy FROM livre WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, livre.getId_livre());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int quantity = resultSet.getInt("quantiy");
+                status = true;
+                String updateQuery = "UPDATE livre SET status = ? WHERE id = ?";
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+                updateStatement.setBoolean(1, status);
+                updateStatement.setInt(2, livre.getId_livre());
+                updateStatement.executeUpdate();
+            } else {
+                status = false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            status = false;
+        }
+
+        return status;
+    }
     private static void updateLivreCopyState(int livreCopyId, int newState) {
         try {
             System.out.println("here");
@@ -108,6 +140,29 @@ public class ReservationDao {
 
 
 
+    public static void retournerLivreQuery(Scanner scanner, String titre) {
+        try {
+
+
+            Livre livre = BookDao.rechercherLivresParTitre(titre);
+            System.out.println("wa here");
+            if (livre != null) {
+
+                String query = "UPDATE reservation SET date_limit = ? WHERE livre_copy_id IN (SELECT id FROM livrecopy WHERE livre_id = ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                LocalDate dateRetour = LocalDate.from(LocalDateTime.now());
+                preparedStatement.setDate(1, Date.valueOf(dateRetour));
+                preparedStatement.setInt(2, livre.getId_livre());
+                preparedStatement.executeUpdate();
+                updateLivreCopyState(livre.getId_livre(), 0);
+                System.out.println("Livre retourné avec succès !");
+            } else {
+                System.out.println("Livre introuvable.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

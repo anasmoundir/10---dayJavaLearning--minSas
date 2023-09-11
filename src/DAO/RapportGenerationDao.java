@@ -10,10 +10,11 @@ import java.sql.SQLException;
 public class RapportGenerationDao {
 
     public static void genererRapportStatistique() {
+        System.out.println("here");
         try {
             Connection connection = Database.getConnection();
 
-   
+
             String totalLivresQuery = "SELECT COUNT(*) AS totalLivres FROM livre";
             PreparedStatement totalLivresStatement = connection.prepareStatement(totalLivresQuery);
             ResultSet totalLivresResult = totalLivresStatement.executeQuery();
@@ -23,7 +24,7 @@ public class RapportGenerationDao {
             }
 
 
-            String livresDisponiblesQuery = "SELECT COUNT(*) AS livresDisponibles FROM livrecopy WHERE etat = 0";
+            String livresDisponiblesQuery = "SELECT COUNT(*) AS livresDisponibles FROM livre  WHERE quantiy <> 0";
             PreparedStatement livresDisponiblesStatement = connection.prepareStatement(livresDisponiblesQuery);
             ResultSet livresDisponiblesResult = livresDisponiblesStatement.executeQuery();
             if (livresDisponiblesResult.next()) {

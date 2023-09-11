@@ -17,6 +17,9 @@
       </list>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectId" id="2UvSIS7FCFv28kVpEPPGqT5VcWd" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -38,6 +41,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -75,7 +79,8 @@
       <option name="presentableId" value="Default" />
       <updated>1693818483148</updated>
       <workItem from="1693818484478" duration="101370000" />
-      <workItem from="1694203036093" duration="25770000" />
+      <workItem from="1694203036093" duration="26966000" />
+      <workItem from="1694440025738" duration="6193000" />
     </task>
     <servers />
   </component>

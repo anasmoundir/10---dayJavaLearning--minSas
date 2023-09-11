@@ -1,5 +1,9 @@
 import java.util.Scanner;
+
+import DAO.RapportGenerationDao;
 import services.*;
+
+import static DAO.RapportGenerationDao.genererRapportStatistique;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,7 +23,7 @@ public class Main {
                     gestionReservations(scanner);
                     break;
                 case 3:
-                    genererRapport();
+                   RapportGenerationDao.genererRapportStatistique();
                     break;
                 case 4:
                     System.out.println("Au revoir !");
