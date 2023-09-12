@@ -10,21 +10,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static DAO.ReservationDao.checkAndUpdateStatus;
+
 public class BookDao {
 
-
+    static  Connection connection = Database.getConnection();
     public static void insertQueryBook(Livre livre, String nom) {
         int auteurId;
 
         try {
 
 
-            Connection connexion = Database.getConnection();
+
             getAuteurIdParNom(nom);
             if (getAuteurIdParNom(nom) != -1) {
                 auteurId = getAuteurIdParNom(nom);
-                String ajoutLivreQuery = "INSERT INTO livre (titre, annee_publication, quantiy, auteur_id) VALUES (?, ?, ?, ?)";
-                PreparedStatement preparedStatement = connexion.prepareStatement(ajoutLivreQuery);
+                String ajoutLivreQuery = "INSERT INTO livre (titre, annee_publication, quantiy, auteur_id,status,ISBN) VALUES (?, ?, ?, ?,?,?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(ajoutLivreQuery);
                 preparedStatement.setString(1, livre.getTitre());
                 preparedStatement.setInt(2, livre.getAnnee_publication());
                 preparedStatement.setInt(3, livre.getQuantity());
@@ -43,7 +45,7 @@ public class BookDao {
 
     public static void supprimerLivre(Livre livre) {
         try {
-            Connection connection = Database.getConnection();
+
             String chercherLivreParNom = "SELECT id FROM livre WHERE titre = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(chercherLivreParNom);
             preparedStatement.setString(1, livre.getTitre());
@@ -65,36 +67,37 @@ public class BookDao {
 
     public static void modifierLivre(Livre livre, String nom) {
         try {
-
-            Connection connection = Database.getConnection();
-            getAuteurIdParNom(nom);
-            if (getAuteurIdParNom(nom) != -1) {
+            int auteurId = getAuteurIdParNom(nom);
+            if (auteurId != -1) {
                 String chercherLivreParNom = "SELECT id FROM livre WHERE titre = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(chercherLivreParNom);
                 preparedStatement.setString(1, livre.getTitre());
                 ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
 
+                if (resultSet.next()) {
                     int livreId = resultSet.getInt("id");
-                    String modifierLivreQuery = "UPDATE livre SET titre = ?, annee_publication = ?, quantiy = ? WHERE id = ?";
+                    String modifierLivreQuery = "UPDATE livre SET titre = ?, annee_publication = ?, quantiy = ?, status = ?, ISBN = ? WHERE id = ?";
                     PreparedStatement updateStatement = connection.prepareStatement(modifierLivreQuery);
                     updateStatement.setString(1, livre.getTitre());
                     updateStatement.setInt(2, livre.getAnnee_publication());
                     updateStatement.setInt(3, livre.getQuantity());
-                    updateStatement.setInt(4, livreId);
-
+                    updateStatement.setBoolean(4, livre.getQuantity() > 0);
+                    updateStatement.setInt(5, livre.getISBN());
+                    updateStatement.setInt(6, livreId);
 
                     int rowsUpdated = updateStatement.executeUpdate();
+                    System.out.println(rowsUpdated);
                     if (rowsUpdated > 0) {
                         System.out.println("Livre modifié avec succès !");
                     } else {
                         System.out.println("Échec de la modification du livre.");
                     }
+                } else {
+                    System.out.println("Aucun livre trouvé avec ce titre.");
                 }
             } else {
-                System.out.println("l'autheur n'exist pas  !");
+                System.out.println("L'auteur n'existe pas !");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -104,7 +107,7 @@ public class BookDao {
     public static List<Livre> afficherTousLesLivres() {
         List<Livre> livres = new ArrayList<>();
         try {
-            Connection connection = Database.getConnection();
+
             String selectAllLivresQuery = "SELECT * FROM livre WHERE quantiy <> 0";
             PreparedStatement preparedStatement = connection.prepareStatement(selectAllLivresQuery);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -126,7 +129,6 @@ public class BookDao {
 
     public static int getAuteurIdParNom(String nom) {
         try {
-            Connection connection = Database.getConnection();
             String rechercheAuteurQuery = "SELECT id FROM auteur WHERE nom = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rechercheAuteurQuery);
             preparedStatement.setString(1, nom);
@@ -144,7 +146,6 @@ public class BookDao {
     public static Auteur fetchAuteurById(int auteurId) {
             Auteur auteur = new Auteur();
         try {
-            Connection connection = Database.getConnection();
             String selectAutherById = "SELECT * FROM auteur where id =?  ";
             PreparedStatement preparedStatement = connection.prepareStatement(selectAutherById);
             preparedStatement.setInt(1, auteurId);
@@ -165,7 +166,6 @@ public class BookDao {
     public static int  getNameAuthorById(String nom)
     {
         try {
-            Connection connection = Database.getConnection();
             String rechercheAuteurQuery = "SELECT id FROM auteur WHERE nom = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rechercheAuteurQuery);
             preparedStatement.setString(1, nom);
@@ -181,11 +181,9 @@ public class BookDao {
 
     public static  Livre rechercherLivresParTitre(String titre)
     {
-        System.out.println("search book function");
          Livre livre = new Livre();
         try {
-            Connection connection = Database.getConnection();
-            String searchingQuery = "SELECT * FROM livre where titre = ?";
+            String searchingQuery = "SELECT * FROM livre WHERE titre  LIKE ?";
             PreparedStatement preparedStatement = connection.prepareStatement(searchingQuery);
             preparedStatement.setString(1,titre);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -212,7 +210,6 @@ public class BookDao {
           Livre livre = new Livre();
          List<Livre> livres = new ArrayList<>();
          try {
-             Connection connection = Database.getConnection();
              String searchingQuery = "SELECT livre.id, livre.titre, livre.annee_publication, livre.quantiy, auteur.nom AS nom_auteur " +
                      "FROM livre " +
                      "INNER JOIN auteur ON livre.auteur_id = auteur.id " +

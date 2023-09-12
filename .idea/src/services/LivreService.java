@@ -140,6 +140,7 @@ public class LivreService {
 
     public static void modifierInformationsLivre(Scanner scanner) {
         try {
+            afficherTousLesLivres();
             System.out.println("Entrez le titre du livre pour modifier le livre  : ");
             String titre = scanner.nextLine();
             System.out.println("Entrez l'annee de publication de livre ");
@@ -148,10 +149,16 @@ public class LivreService {
             int quantity = scanner.nextInt();
             System.out.println("Entrez le nom de l'auteur");
             String nom = scanner.next();
+//            System.out.println("Entrez le status de livre");
+            Boolean status = true;
+            System.out.println("Entrez l'ISBN de livre");
+            int ISBN = scanner.nextInt();
             Livre livre1 = new Livre();
             livre1.setTitre(titre);
             livre1.setQuantity(quantity);
             livre1.setAnnee_publication(anne);
+            livre1.setStatus(status);
+            livre1.setISBN(ISBN);
             BookDao.modifierLivre(livre1,nom);
         }catch (Exception e)
         {

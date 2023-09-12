@@ -19,22 +19,18 @@ public class ReservationDao {
 
         Livre livre = new Livre();
         try {
-
             livre = BookDao.rechercherLivresParTitre(titre);
-
+            System.out.println(livre.getTitre());
 
             if (livre != null) {
                 String statement = "SELECT * FROM livrecopy WHERE livre_id = ? AND etat = 1 ";
                 PreparedStatement preparedStatement = connection.prepareStatement(statement);
-                preparedStatement.setInt(1, livre.getId_livre());
-//                System.out.println(livre.getId_livre());
+                preparedStatement.setInt(1, livre.getId_livre());;
                 ResultSet resultSet = preparedStatement.executeQuery();
-//                System.out.println(resultSet);
                 if (resultSet.next()) {
+                     livre = updateLivrequantity(livre);
                     int livreCopyId = resultSet.getInt("id");
                     int adherentId = obtenirIdAdherent(scanner);
-                    System.out.println(adherentId);
-
                     if (adherentId != -1) {
                         String query = "INSERT INTO reservation (livre_copy_id,adherent_id,date_reservation,date_limit) VALUES(?,?,?,?)";
                         PreparedStatement preparedStatement1 =connection.prepareStatement(query);
@@ -64,6 +60,28 @@ public class ReservationDao {
     }
 
 
+    public  static Livre updateLivrequantity(Livre livre)
+    {
+        int newquantity = livre.getQuantity();
+        if(newquantity>0)
+        {
+        try {
+            String query ="UPDATE livre SET quantiy = ? WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            newquantity =newquantity-1;
+            preparedStatement.setInt(1,newquantity);
+            preparedStatement.setInt(2,livre.getId_livre());
+            preparedStatement.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return livre;
+        }
+        else
+        {
+            return livre;
+        }
+    }
     public static int obtenirIdAdherent(Scanner scanner) {
         System.out.print("Entrez le numéro de membre de l'adhérent : ");
         String numeroMembre = scanner.nextLine();
@@ -93,9 +111,7 @@ public class ReservationDao {
             String query = "SELECT quantiy FROM livre WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, livre.getId_livre());
-
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
                 int quantity = resultSet.getInt("quantiy");
                 status = true;
@@ -143,11 +159,8 @@ public class ReservationDao {
     public static void retournerLivreQuery(Scanner scanner, String titre) {
         try {
 
-
             Livre livre = BookDao.rechercherLivresParTitre(titre);
-            System.out.println("wa here");
             if (livre != null) {
-
                 String query = "UPDATE reservation SET date_limit = ? WHERE livre_copy_id IN (SELECT id FROM livrecopy WHERE livre_id = ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
                 LocalDate dateRetour = LocalDate.from(LocalDateTime.now());

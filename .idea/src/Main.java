@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 import DAO.RapportGenerationDao;
@@ -91,6 +92,7 @@ public class Main {
                 default:
                     System.out.println("Choix invalide. Veuillez réessayer.");
             }
+            clearConsole();
         }
     }
 
@@ -100,4 +102,37 @@ public class Main {
     private static void genererRapport() {
 
     }
+
+    public static void clearConsole() {
+        try {
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows")) {
+                // Clear the console on Windows
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // Clear the console on Unix/Linux/Mac
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (IOException | InterruptedException e) {
+            // Handle exceptions here
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
